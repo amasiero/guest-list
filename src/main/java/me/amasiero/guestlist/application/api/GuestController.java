@@ -1,9 +1,8 @@
 package me.amasiero.guestlist.application.api;
 
-import jakarta.websocket.server.PathParam;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,7 @@ public record GuestController(
     @PostMapping("/guest_list/{name}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<GuestCreatedResponse> create(
-        @PathParam("name") String name,
+        @PathVariable("name") String name,
         @RequestBody Guest guest
     ) {
         var created = guestService.createGuest(guest.toBuilder()
