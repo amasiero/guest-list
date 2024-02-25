@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import me.amasiero.guestlist.domain.core.exception.TableNotFoundException;
+import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
 
 @Slf4j
 @ControllerAdvice
@@ -38,6 +39,17 @@ public record GlobalExceptionHandler() {
         return ErrorDto.builder()
                        .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                        .message(tableNotFoundException.getMessage())
+                       .build();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = { TableOutOfCapacityException.class })
+    public ErrorDto handleException(TableOutOfCapacityException tableOutOfCapacityException) {
+        log.error(tableOutOfCapacityException.getMessage(), tableOutOfCapacityException);
+        return ErrorDto.builder()
+                       .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                       .message(tableOutOfCapacityException.getMessage())
                        .build();
     }
 
