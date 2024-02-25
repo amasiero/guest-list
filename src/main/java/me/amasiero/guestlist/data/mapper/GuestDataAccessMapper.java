@@ -10,7 +10,7 @@ public record GuestDataAccessMapper() {
     public GuestEntity toEntity(Guest guest) {
         return GuestEntity.builder()
                           .name(guest.name())
-                          .table(guest.table())
+//                          .table(guest.table())
                           .accompanyingGuests(guest.accompanyingGuests())
                           .timeArrived(guest.timeArrived())
                           .build();
@@ -19,7 +19,7 @@ public record GuestDataAccessMapper() {
     public Guest toDto(GuestEntity entity) {
         return Guest.builder()
                     .name(entity.getName())
-                    .table(entity.getTable())
+//                    .table(entity.getTable())
                     .accompanyingGuests(entity.getAccompanyingGuests())
                     .timeArrived(entity.getTimeArrived())
                     .build();
