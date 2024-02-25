@@ -13,9 +13,33 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import me.amasiero.guestlist.domain.core.exception.TableNotFoundException;
+
 @Slf4j
 @ControllerAdvice
 public record GlobalExceptionHandler() {
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = { Exception.class })
+    public ErrorDto handleException(Exception exception) {
+        log.error(exception.getMessage(), exception);
+        return ErrorDto.builder()
+                       .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                       .message("An unexpected error occurred.")
+                       .build();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = { TableNotFoundException.class })
+    public ErrorDto handleException(TableNotFoundException tableNotFoundException) {
+        log.error(tableNotFoundException.getMessage(), tableNotFoundException);
+        return ErrorDto.builder()
+                       .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                       .message(tableNotFoundException.getMessage())
+                       .build();
+    }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
