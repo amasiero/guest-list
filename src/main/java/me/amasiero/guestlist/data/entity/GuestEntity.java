@@ -24,7 +24,7 @@ import lombok.Setter;
 @Table(name = "guests")
 public class GuestEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String name;
     @Column(name = "table_number")

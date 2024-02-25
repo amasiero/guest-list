@@ -27,7 +27,7 @@ import lombok.Setter;
 @Table(name = "events")
 public class EventEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(name = "total_tables")
     private Integer totalTables;
