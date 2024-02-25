@@ -22,7 +22,7 @@ public record GlobalExceptionHandler() {
     @ExceptionHandler(value = { ValidationException.class })
     public ErrorDto handleException(ValidationException validationException) {
         if (validationException instanceof ConstraintViolationException constraintViolationException) {
-            String violations = extractViolationsFromException(constraintViolationException);
+            var violations = extractViolationsFromException(constraintViolationException);
             log.error(violations, validationException);
             return ErrorDto.builder()
                            .code(HttpStatus.BAD_REQUEST.getReasonPhrase())
