@@ -35,3 +35,5 @@ spring:
     default-property-inclusion: NON_NULL
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false
+  aop:
+    proxy-target-class: false

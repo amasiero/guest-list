@@ -40,7 +40,6 @@ public class GuestEntity {
     @Override
     public boolean equals(Object o) {
         return (o instanceof GuestEntity guest) &&
-            guest.getId().equals(getId()) &&
             guest.getName().equals(getName()) &&
             guest.getTable().equals(getTable()) &&
             guest.getAccompanyingGuests().equals(getAccompanyingGuests());
@@ -48,8 +47,7 @@ public class GuestEntity {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (table != null ? table.hashCode() : 0);
         result = 31 * result + (accompanyingGuests != null ? accompanyingGuests.hashCode() : 0);
         return result;
