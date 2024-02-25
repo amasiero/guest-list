@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,15 +27,13 @@ public class GuestEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(name = "table_number")
-    private Integer table;
+    @OneToOne
+    @JoinColumn(name = "table_id")
+    private TableEntity table;
     @Column(name = "accompanying_guests")
     private Integer accompanyingGuests;
     @Column(name = "time_arrived")
     private String timeArrived;
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private EventEntity event;
 
     @Override
     public boolean equals(Object o) {

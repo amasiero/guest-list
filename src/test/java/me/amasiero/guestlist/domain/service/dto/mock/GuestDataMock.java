@@ -1,18 +1,14 @@
 package me.amasiero.guestlist.domain.service.dto.mock;
 
-import java.util.List;
-
-import me.amasiero.guestlist.domain.service.dto.Guest;
+import me.amasiero.guestlist.domain.core.valueobject.Guest;
 
 public class GuestDataMock {
-
     protected GuestDataMock() {
     }
 
     public static Guest.GuestBuilder anGuest() {
         return Guest.builder()
                     .name("John Doe")
-                    .table(1)
                     .accompanyingGuests(2);
     }
 
@@ -24,15 +20,7 @@ public class GuestDataMock {
         return anGuest().name(name).build();
     }
 
-    public static Guest buildWithTable(Integer table) {
-        return anGuest().table(table).build();
-    }
-
-    public static Guest buildWithAccompanyingGuests(Integer accompanyingGuests) {
+    public static Guest buildWithAccompanyingGuests(int accompanyingGuests) {
         return anGuest().accompanyingGuests(accompanyingGuests).build();
-    }
-
-    public static List<Guest> buildList() {
-        return List.of(build());
     }
 }

@@ -9,25 +9,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.amasiero.guestlist.application.api.dto.GuestCreatedResponse;
-import me.amasiero.guestlist.domain.service.dto.Guest;
-import me.amasiero.guestlist.domain.service.ports.input.GuestService;
+import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateRequest;
+import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateResponse;
+import me.amasiero.guestlist.domain.service.ports.input.ReservationService;
 
 @RestController
 @RequestMapping("/api/v1")
-public record GuestController(
-    GuestService guestService
+public record ReservationController(
+    ReservationService reservationService
 ) {
     @PostMapping("/guest_list/{name}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<GuestCreatedResponse> create(
+    public ResponseEntity<ReservationCreateResponse> create(
         @PathVariable("name") String name,
-        @RequestBody Guest guest
+        @RequestBody ReservationCreateRequest request
     ) {
-        var created = guestService.createGuest(guest.toBuilder()
-                                                    .name(name)
-                                                    .build());
+        var created = reservationService.createReservation(request.toBuilder()
+                                                                  .name(name)
+                                                                  .build());
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(new GuestCreatedResponse(created));
+                             .body(created);
     }
 }
