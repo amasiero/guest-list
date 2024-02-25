@@ -1,6 +1,8 @@
 package me.amasiero.guestlist.domain.service;
 
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
@@ -14,12 +16,22 @@ import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 @Service
 @Validated
 public record GuestServiceImpl(
-    GuestRepository guestRepository
+    GuestRepository guestRepository,
+    Validator validator
 ) implements GuestService {
 
     @Override
     public Guest createGuest(Guest guest) {
+        validateGuest(guest);
         return guestRepository.save(guest);
+    }
+
+    private void validateGuest(Guest guest) {
+        var violations = validator.validate(guest);
+        if (!violations.isEmpty()) {
+            log.error("Guest validation failed: {}", violations);
+            throw new ConstraintViolationException(violations);
+        }
     }
 }
 
