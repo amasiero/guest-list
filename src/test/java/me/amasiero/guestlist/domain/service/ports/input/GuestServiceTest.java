@@ -16,6 +16,7 @@ import me.amasiero.guestlist.domain.service.dto.mock.GuestDataMock;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 import me.amasiero.guestlist.domain.service.util.GuestHelper;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,8 +47,9 @@ class GuestServiceTest {
         public void shouldCreateAGuest() {
             when(repository.save(any(Guest.class))).thenReturn(GuestDataMock.build());
 
-            Guest result = service.createGuest(GuestDataMock.build());
+            var result = service.createGuest(GuestDataMock.build());
 
+            assertFalse(result.isEmpty());
             assertNotNull(result);
         }
 
@@ -60,35 +62,35 @@ class GuestServiceTest {
         @Test
         @DisplayName("should not create a guest without name")
         public void shouldNotCreateAGuestWithoutName() {
-            Guest invalidGuest = GuestDataMock.buildWithName(null);
+            var invalidGuest = GuestDataMock.buildWithName(null);
             assertThrows(ConstraintViolationException.class, () -> service.createGuest(invalidGuest));
         }
 
         @Test
         @DisplayName("should not create a guest without table")
         public void shouldNotCreateAGuestWithoutTable() {
-            Guest invalidGuest = GuestDataMock.buildWithTable(null);
+            var invalidGuest = GuestDataMock.buildWithTable(null);
             assertThrows(ConstraintViolationException.class, () -> service.createGuest(invalidGuest));
         }
 
         @Test
         @DisplayName("should not create a guest without a valid table")
         public void shouldNotCreateAGuestWithoutAValidTable() {
-            Guest invalidGuest = GuestDataMock.buildWithTable(0);
+            var invalidGuest = GuestDataMock.buildWithTable(0);
             assertThrows(ConstraintViolationException.class, () -> service.createGuest(invalidGuest));
         }
 
         @Test
         @DisplayName("should not create a guest without accompanying guests")
         public void shouldNotCreateAGuestWithoutAccompanyingGuests() {
-            Guest invalidGuest = GuestDataMock.buildWithAccompanyingGuests(null);
+            var invalidGuest = GuestDataMock.buildWithAccompanyingGuests(null);
             assertThrows(ConstraintViolationException.class, () -> service.createGuest(invalidGuest));
         }
 
         @Test
         @DisplayName("should not create a guest without a valid accompanying guests")
         public void shouldNotCreateAGuestWithoutAValidAccompanyingGuests() {
-            Guest invalidGuest = GuestDataMock.buildWithAccompanyingGuests(0);
+            var invalidGuest = GuestDataMock.buildWithAccompanyingGuests(0);
             assertThrows(ConstraintViolationException.class, () -> service.createGuest(invalidGuest));
         }
     }

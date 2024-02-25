@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 import me.amasiero.guestlist.domain.service.dto.Guest;
 
 public interface GuestService {
-    Guest createGuest(@NotNull Guest guest);
+    String createGuest(@NotNull Guest guest);
 }

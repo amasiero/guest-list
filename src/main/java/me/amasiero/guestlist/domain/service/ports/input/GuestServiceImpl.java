@@ -19,9 +19,9 @@ public record GuestServiceImpl(
 ) implements GuestService {
 
     @Override
-    public Guest createGuest(Guest guest) {
+    public String createGuest(Guest guest) {
         guestHelper.validate(guest);
-        return guestRepository.save(guest);
+        return guestRepository.save(guest).name();
     }
 }
 
