@@ -6,6 +6,7 @@ import me.amasiero.guestlist.data.mapper.GuestDataAccessMapper;
 import me.amasiero.guestlist.data.repository.GuestJpaRepository;
 import me.amasiero.guestlist.data.repository.TableJpaRepository;
 import me.amasiero.guestlist.domain.core.entity.Reservation;
+import me.amasiero.guestlist.domain.core.exception.TableNotFoundException;
 import me.amasiero.guestlist.domain.service.ports.output.ReservationRepository;
 
 @Component
@@ -18,7 +19,10 @@ public record ReservationRepositoryImpl(
     public Reservation save(Reservation reservation) {
         var entity = mapper.toEntity(reservation, () -> tableRepository
             .findById(reservation.table().id())
-            .orElseThrow(() -> new IllegalArgumentException("Table not found")));
+            .orElseThrow(() -> new TableNotFoundException(
+                "Table with number %s not found."
+                    .formatted(reservation.table().id())
+            )));
         var entitySaved = repository.save(entity);
         return mapper.toDto(entitySaved);
     }
