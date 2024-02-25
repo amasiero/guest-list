@@ -7,4 +7,6 @@ public interface GuestRepository {
     Reservation save(GuestEntity guestEntity);
 
     GuestEntity getGuestEntity(Reservation reservation);
+
+    Boolean hasTableAvailable();
 }

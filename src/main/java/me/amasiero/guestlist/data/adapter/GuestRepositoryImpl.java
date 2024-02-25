@@ -31,4 +31,9 @@ public record GuestRepositoryImpl(
                     .formatted(reservation.table().id())
             )));
     }
+
+    @Override
+    public Boolean hasTableAvailable() {
+        return null;
+    }
 }
