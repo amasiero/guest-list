@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import me.amasiero.guestlist.domain.service.dto.mock.GuestDataMock;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
-import me.amasiero.guestlist.domain.service.util.GuestHelper;
+import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,13 +26,13 @@ class GuestServiceTest {
     @Mock
     protected GuestRepository repository;
     @Mock
-    protected GuestHelper helper;
+    protected ValidatorHelper helper;
     protected GuestService service;
 
     @BeforeEach
     public void setUp() {
         try (var factory = Validation.buildDefaultValidatorFactory()) {
-            helper = new GuestHelper(factory.getValidator());
+            helper = new ValidatorHelper(factory.getValidator());
             service = new GuestServiceImpl(repository, helper);
         }
     }

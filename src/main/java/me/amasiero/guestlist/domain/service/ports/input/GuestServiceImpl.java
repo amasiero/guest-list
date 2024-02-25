@@ -8,19 +8,19 @@ import org.springframework.validation.annotation.Validated;
 
 import me.amasiero.guestlist.domain.service.dto.CreateGuest;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
-import me.amasiero.guestlist.domain.service.util.GuestHelper;
+import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
 @Slf4j
 @Service
 @Validated
 public record GuestServiceImpl(
     GuestRepository guestRepository,
-    GuestHelper guestHelper
+    ValidatorHelper validatorHelper
 ) implements GuestService {
 
     @Override
     public String createGuest(CreateGuest createGuest) {
-        guestHelper.validate(createGuest);
+        validatorHelper.validate(() -> createGuest);
         return guestRepository.save(createGuest).name();
     }
 }
