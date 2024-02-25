@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import me.amasiero.guestlist.domain.service.dto.Guest;
+import me.amasiero.guestlist.domain.service.dto.CreateGuest;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 import me.amasiero.guestlist.domain.service.util.GuestHelper;
 
@@ -19,9 +19,9 @@ public record GuestServiceImpl(
 ) implements GuestService {
 
     @Override
-    public String createGuest(Guest guest) {
-        guestHelper.validate(guest);
-        return guestRepository.save(guest).name();
+    public String createGuest(CreateGuest createGuest) {
+        guestHelper.validate(createGuest);
+        return guestRepository.save(createGuest).name();
     }
 }
 

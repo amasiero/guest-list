@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import me.amasiero.guestlist.domain.service.dto.Guest;
 import me.amasiero.guestlist.domain.service.dto.mock.GuestDataMock;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 import me.amasiero.guestlist.domain.service.util.GuestHelper;
@@ -40,12 +39,12 @@ class GuestServiceTest {
 
     @Nested
     @DisplayName("when creating a guest")
-    class CreateGuest {
+    class CreateCreateGuest {
 
         @Test
         @DisplayName("should successfully create a guest")
         public void shouldCreateAGuest() {
-            when(repository.save(any(Guest.class))).thenReturn(GuestDataMock.build());
+            when(repository.save(any(me.amasiero.guestlist.domain.service.dto.CreateGuest.class))).thenReturn(GuestDataMock.build());
 
             var result = service.createGuest(GuestDataMock.build());
 

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record Guest(
+public record CreateGuest(
     @NotBlank(message = "Name is mandatory")
     String name,
     @NotNull(message = "Table number is mandatory")
@@ -17,8 +17,8 @@ public record Guest(
     Integer accompanyingGuests,
     String timeArrived
 ) {
-    public GuestBuilder toBuilder() {
-        return new GuestBuilder()
+    public CreateGuestBuilder toBuilder() {
+        return new CreateGuestBuilder()
             .name(name)
             .table(table)
             .accompanyingGuests(accompanyingGuests)

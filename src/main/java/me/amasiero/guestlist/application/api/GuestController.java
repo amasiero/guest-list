@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.amasiero.guestlist.application.api.dto.GuestCreatedResponse;
-import me.amasiero.guestlist.domain.service.dto.Guest;
+import me.amasiero.guestlist.domain.service.dto.CreateGuest;
 import me.amasiero.guestlist.domain.service.ports.input.GuestService;
 
 @RestController
@@ -22,11 +22,11 @@ public record GuestController(
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<GuestCreatedResponse> create(
         @PathVariable("name") String name,
-        @RequestBody Guest guest
+        @RequestBody CreateGuest createGuest
     ) {
-        var created = guestService.createGuest(guest.toBuilder()
-                                                    .name(name)
-                                                    .build());
+        var created = guestService.createGuest(createGuest.toBuilder()
+                                                          .name(name)
+                                                          .build());
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(new GuestCreatedResponse(created));
     }

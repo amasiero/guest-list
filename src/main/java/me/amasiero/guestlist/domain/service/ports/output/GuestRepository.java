@@ -1,7 +1,7 @@
 package me.amasiero.guestlist.domain.service.ports.output;
 
-import me.amasiero.guestlist.domain.service.dto.Guest;
+import me.amasiero.guestlist.domain.service.dto.CreateGuest;
 
 public interface GuestRepository {
-    Guest save(Guest guest);
+    CreateGuest save(CreateGuest createGuest);
 }

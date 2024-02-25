@@ -3,25 +3,25 @@ package me.amasiero.guestlist.data.mapper;
 import org.springframework.stereotype.Component;
 
 import me.amasiero.guestlist.data.entity.GuestEntity;
-import me.amasiero.guestlist.domain.service.dto.Guest;
+import me.amasiero.guestlist.domain.service.dto.CreateGuest;
 
 @Component
 public record GuestDataAccessMapper() {
-    public GuestEntity toEntity(Guest guest) {
+    public GuestEntity toEntity(CreateGuest createGuest) {
         return GuestEntity.builder()
-                          .name(guest.name())
+                          .name(createGuest.name())
 //                          .table(guest.table())
-                          .accompanyingGuests(guest.accompanyingGuests())
-                          .timeArrived(guest.timeArrived())
+                          .accompanyingGuests(createGuest.accompanyingGuests())
+                          .timeArrived(createGuest.timeArrived())
                           .build();
     }
 
-    public Guest toDto(GuestEntity entity) {
-        return Guest.builder()
-                    .name(entity.getName())
+    public CreateGuest toDto(GuestEntity entity) {
+        return CreateGuest.builder()
+                          .name(entity.getName())
 //                    .table(entity.getTable())
-                    .accompanyingGuests(entity.getAccompanyingGuests())
-                    .timeArrived(entity.getTimeArrived())
-                    .build();
+                          .accompanyingGuests(entity.getAccompanyingGuests())
+                          .timeArrived(entity.getTimeArrived())
+                          .build();
     }
 }
