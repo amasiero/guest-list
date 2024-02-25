@@ -9,6 +9,6 @@ public record GuestServiceImpl(
 
     @Override
     public Guest createGuest(Guest guest) {
-        return guest;
+        return guestRepository.save(guest);
     }
 }

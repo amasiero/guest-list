@@ -13,6 +13,8 @@ import me.amasiero.guestlist.domain.service.dto.mock.GuestDataMock;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GuestServiceTest {
@@ -33,7 +35,10 @@ class GuestServiceTest {
         @Test
         @DisplayName("should successfully create a guest")
         public void shouldCreateAGuest() {
+            when(guestRepository.save(any(Guest.class))).thenReturn(GuestDataMock.build());
+            
             Guest result = guestService.createGuest(GuestDataMock.build());
+
             assertNotNull(result);
         }
     }
