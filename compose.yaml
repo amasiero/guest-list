@@ -16,6 +16,19 @@ services:
       - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  guest-list:
+    container_name: guest-list-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/guest-list
+      DB_USER: ${POSTGRES_USER:-postgres}
+      DB_PASS: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
 
 
 volumes:
