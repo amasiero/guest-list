@@ -46,6 +46,24 @@ public record ReservationHandler(
         guestRepository.save(guestEntity);
     }
 
+    public List<GuestArrivedDto> listOfArrivals() {
+        var guests = guestRepository.findAll();
+        return guests.stream()
+                     .filter(guest -> guest.getTimeArrived() != null)
+                     .map(GuestDataMapper::fromEntityArrived)
+                     .toList();
+    }
+
+    public void guestLeave(String name) {
+        var guest = guestRepository.getGuestEntity(Reservation.builder()
+                                                              .guest(Guest.builder()
+                                                                          .name(name)
+                                                                          .build())
+                                                              .build());
+        guest.getTable().setStatus(TableStatus.AVAILABLE);
+        guestRepository.delete(guest);
+    }
+
     private void validateGuest(GuestEntity guest) {
         if (guest.getAccompanyingGuests() > guest.getTable().getSize()) {
             throw new TableOutOfCapacityException("The table is too small for the number of guests");
@@ -64,23 +82,5 @@ public record ReservationHandler(
         if (reservation.guest().accompanyingGuests() > guestEntity.getTable().getSize()) {
             throw new TableOutOfCapacityException("The table is too small for the number of guests");
         }
-    }
-
-    public List<GuestArrivedDto> listOfArrivals() {
-        var guests = guestRepository.findAll();
-        return guests.stream()
-                     .filter(guest -> guest.getTimeArrived() != null)
-                     .map(GuestDataMapper::fromEntityArrived)
-                     .toList();
-    }
-
-    public void guestLeave(String name) {
-        var guest = guestRepository.getGuestEntity(Reservation.builder()
-                                                              .guest(Guest.builder()
-                                                                          .name(name)
-                                                                          .build())
-                                                              .build());
-        guest.getTable().setStatus(TableStatus.AVAILABLE);
-        guestRepository.delete(guest);
     }
 }
