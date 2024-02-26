@@ -64,4 +64,11 @@ public record GuestRepositoryImpl(
     public List<GuestEntity> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public void delete(GuestEntity guest) {
+        var table = guest.getTable();
+        tableRepository.save(table);
+        repository.delete(guest);
+    }
 }

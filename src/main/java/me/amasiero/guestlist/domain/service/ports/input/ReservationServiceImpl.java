@@ -56,5 +56,10 @@ public record ReservationServiceImpl(
         var list = reservationHandler.listOfArrivals();
         return new GuestListResponse<>(list);
     }
+
+    @Override
+    public void guestLeave(String name) {
+        reservationHandler.guestLeave(name);
+    }
 }
 

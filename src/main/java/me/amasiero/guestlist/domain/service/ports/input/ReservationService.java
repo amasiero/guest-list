@@ -18,4 +18,6 @@ public interface ReservationService {
     ReservationUpdateResponse updateReservation(ReservationUpdateRequest build);
 
     GuestListResponse<GuestArrivedDto> listOfArrivals();
+
+    void guestLeave(String name);
 }

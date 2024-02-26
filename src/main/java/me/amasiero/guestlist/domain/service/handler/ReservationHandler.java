@@ -10,6 +10,7 @@ import me.amasiero.guestlist.data.entity.GuestEntity;
 import me.amasiero.guestlist.domain.core.entity.Reservation;
 import me.amasiero.guestlist.domain.core.exception.TableNotAvailableException;
 import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
+import me.amasiero.guestlist.domain.core.valueobject.Guest;
 import me.amasiero.guestlist.domain.core.valueobject.TableStatus;
 import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
@@ -71,5 +72,15 @@ public record ReservationHandler(
                      .filter(guest -> guest.getTimeArrived() != null)
                      .map(GuestDataMapper::fromEntityArrived)
                      .toList();
+    }
+
+    public void guestLeave(String name) {
+        var guest = guestRepository.getGuestEntity(Reservation.builder()
+                                                              .guest(Guest.builder()
+                                                                          .name(name)
+                                                                          .build())
+                                                              .build());
+        guest.getTable().setStatus(TableStatus.AVAILABLE);
+        guestRepository.delete(guest);
     }
 }
