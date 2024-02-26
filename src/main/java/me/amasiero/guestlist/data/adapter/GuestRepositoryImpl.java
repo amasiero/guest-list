@@ -36,7 +36,7 @@ public record GuestRepositoryImpl(
 
     @Override
     public Boolean hasTableAvailable() {
-        return null;
+        return tableRepository.hasTableAvailable();
     }
 
     @Override
