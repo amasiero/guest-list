@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import me.amasiero.guestlist.data.entity.GuestEntity;
 import me.amasiero.guestlist.domain.core.entity.Reservation;
+import me.amasiero.guestlist.domain.core.exception.TableNotAvailableException;
 import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
+import me.amasiero.guestlist.domain.core.valueobject.TableStatus;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
@@ -27,6 +29,14 @@ public record ReservationHandler(
     private void validateGuest(GuestEntity guest) {
         if (guest.getAccompanyingGuests() > guest.getTable().getSize()) {
             throw new TableOutOfCapacityException("The table is too small for the number of guests");
+        }
+
+        if (guest.getTable().getStatus() != TableStatus.AVAILABLE) {
+            throw new TableNotAvailableException("The table is not available");
+        }
+
+        if (!guestRepository.hasTableAvailable()) {
+            throw new TableOutOfCapacityException("There are no tables available");
         }
     }
 }
