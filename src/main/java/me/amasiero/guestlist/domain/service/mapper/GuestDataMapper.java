@@ -3,6 +3,7 @@ package me.amasiero.guestlist.domain.service.mapper;
 import lombok.experimental.UtilityClass;
 
 import me.amasiero.guestlist.data.entity.GuestEntity;
+import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
 
 @UtilityClass
@@ -14,5 +15,13 @@ public class GuestDataMapper {
                        .table(guestEntity.getTable().getId().intValue())
                        .accompanyingGuests(guestEntity.getAccompanyingGuests())
                        .build();
+    }
+
+    public static GuestArrivedDto fromEntityArrived(GuestEntity guestEntity) {
+        return GuestArrivedDto.builder()
+                              .name(guestEntity.getName())
+                              .accompanyingGuests(guestEntity.getAccompanyingGuests())
+                              .timeArrived(guestEntity.getTimeArrived())
+                              .build();
     }
 }

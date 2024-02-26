@@ -8,7 +8,11 @@ import org.springframework.validation.annotation.Validated;
 
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateRequest;
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateResponse;
+import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
+import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestListResponse;
+import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
+import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateResponse;
 import me.amasiero.guestlist.domain.service.handler.ReservationHandler;
 import me.amasiero.guestlist.domain.service.mapper.ReservationDataMapper;
 import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
@@ -26,15 +30,36 @@ public record ReservationServiceImpl(
         validatorHelper.validate(() -> guest);
         var reservationCreated = reservationHandler.createReservation(
             guest,
-            ReservationDataMapper::fromGuestCreateRequest
+            ReservationDataMapper::fromRequest
         );
         return new ReservationCreateResponse(reservationCreated.guest().name());
     }
 
     @Override
-    public GuestListResponse listGuests() {
+    public GuestListResponse<GuestDto> listGuests() {
         var list = reservationHandler.listGuests();
-        return new GuestListResponse(list);
+        return new GuestListResponse<>(list);
+    }
+
+    @Override
+    public ReservationUpdateResponse updateReservation(ReservationUpdateRequest guest) {
+        validatorHelper.validate(() -> guest);
+        reservationHandler.updateReservation(
+            guest,
+            ReservationDataMapper::fromRequest
+        );
+        return new ReservationUpdateResponse(guest.name());
+    }
+
+    @Override
+    public GuestListResponse<GuestArrivedDto> listOfArrivals() {
+        var list = reservationHandler.listOfArrivals();
+        return new GuestListResponse<>(list);
+    }
+
+    @Override
+    public void guestLeave(String name) {
+        reservationHandler.guestLeave(name);
     }
 }
 
