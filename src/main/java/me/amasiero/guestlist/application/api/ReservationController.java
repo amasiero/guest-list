@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateRequest;
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateResponse;
+import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
+import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestListResponse;
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateResponse;
@@ -38,7 +40,7 @@ public record ReservationController(
 
     @GetMapping("/guest_list")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<GuestListResponse> list() {
+    public ResponseEntity<GuestListResponse<GuestDto>> list() {
         var list = reservationService.listGuests();
         return ResponseEntity.status(HttpStatus.OK)
                              .body(list);
@@ -55,5 +57,13 @@ public record ReservationController(
                                                                   .build());
         return ResponseEntity.status(HttpStatus.OK)
                              .body(updated);
+    }
+
+    @GetMapping("/guests")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<GuestListResponse<GuestArrivedDto>> listOfArrivals() {
+        var list = reservationService.listOfArrivals();
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(list);
     }
 }

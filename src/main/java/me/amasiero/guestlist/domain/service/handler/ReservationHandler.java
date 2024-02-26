@@ -11,6 +11,7 @@ import me.amasiero.guestlist.domain.core.entity.Reservation;
 import me.amasiero.guestlist.domain.core.exception.TableNotAvailableException;
 import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
 import me.amasiero.guestlist.domain.core.valueobject.TableStatus;
+import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
 import me.amasiero.guestlist.domain.service.mapper.GuestDataMapper;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
@@ -62,5 +63,13 @@ public record ReservationHandler(
         if (reservation.guest().accompanyingGuests() > guestEntity.getTable().getSize()) {
             throw new TableOutOfCapacityException("The table is too small for the number of guests");
         }
+    }
+
+    public List<GuestArrivedDto> listOfArrivals() {
+        var guests = guestRepository.findAll();
+        return guests.stream()
+                     .filter(guest -> guest.getTimeArrived() != null)
+                     .map(GuestDataMapper::fromEntityArrived)
+                     .toList();
     }
 }
