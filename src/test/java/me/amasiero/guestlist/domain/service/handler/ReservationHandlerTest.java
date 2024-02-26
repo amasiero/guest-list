@@ -1,5 +1,6 @@
 package me.amasiero.guestlist.domain.service.handler;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,11 +16,13 @@ import me.amasiero.guestlist.domain.core.entity.Reservation;
 import me.amasiero.guestlist.domain.core.exception.TableNotAvailableException;
 import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
 import me.amasiero.guestlist.domain.core.valueobject.TableStatus;
+import me.amasiero.guestlist.domain.service.mock.GuestDataMock;
 import me.amasiero.guestlist.domain.service.mock.GuestEntityDataMock;
 import me.amasiero.guestlist.domain.service.mock.ReservationDataMock;
 import me.amasiero.guestlist.domain.service.mock.TableEntityDataMock;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
@@ -82,6 +85,85 @@ class ReservationHandlerTest {
             when(guestRepository.hasTableAvailable()).thenReturn(false);
 
             assertThrows(TableOutOfCapacityException.class, () -> reservationHandler.createReservation(reservation, Function.identity()));
+        }
+    }
+
+    @Nested
+    @DisplayName("when listing guests")
+    class ListGuests {
+
+        @Test
+        @DisplayName("returns all guests")
+        void returnsAllGuests() {
+            var guests = List.of(GuestEntityDataMock.build(), GuestEntityDataMock.build());
+            when(guestRepository.findAll()).thenReturn(guests);
+
+            var result = reservationHandler.listGuests();
+
+            assertEquals(guests.size(), result.size());
+            verify(guestRepository).findAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("when updating a reservation")
+    class UpdateReservation {
+
+        @Test
+        @DisplayName("updates the reservation successfully")
+        void updatesReservationSuccessfully() {
+            var reservation = ReservationDataMock.build();
+            var guestEntity = GuestEntityDataMock.build();
+            when(guestRepository.getGuestEntity(any(Reservation.class))).thenReturn(guestEntity);
+
+            reservationHandler.updateReservation(reservation, Function.identity());
+
+            verify(guestRepository).getGuestEntity(any(Reservation.class));
+            verify(guestRepository).save(any(GuestEntity.class));
+        }
+
+        @Test
+        @DisplayName("throws exception when table is out of capacity")
+        void throwsExceptionWhenTableOutOfCapacity() {
+            var reservation = ReservationDataMock.buildWithGuest(GuestDataMock.buildWithAccompanyingGuests(5));
+            var guestEntity = GuestEntityDataMock.build();
+            when(guestRepository.getGuestEntity(any(Reservation.class))).thenReturn(guestEntity);
+
+            assertThrows(TableOutOfCapacityException.class, () -> reservationHandler.updateReservation(reservation, Function.identity()));
+        }
+    }
+
+    @Nested
+    @DisplayName("when listing arrivals")
+    class ListOfArrivals {
+
+        @Test
+        @DisplayName("returns all arrived guests")
+        void returnsAllArrivedGuests() {
+            var guests = List.of(GuestEntityDataMock.anGuestEntityWithTimeArrived("2022-03-01T10:00:00"), GuestEntityDataMock.anGuestEntityWithTimeArrived("2022-03-01T11:00:00"));
+            when(guestRepository.findAll()).thenReturn(guests);
+
+            var result = reservationHandler.listOfArrivals();
+
+            assertEquals(guests.size(), result.size());
+            verify(guestRepository).findAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("when a guest leaves")
+    class GuestLeave {
+
+        @Test
+        @DisplayName("removes the guest successfully")
+        void removesGuestSuccessfully() {
+            var guestEntity = GuestEntityDataMock.build();
+            when(guestRepository.getGuestEntity(any(Reservation.class))).thenReturn(guestEntity);
+
+            reservationHandler.guestLeave(guestEntity.getName());
+
+            verify(guestRepository).getGuestEntity(any(Reservation.class));
+            verify(guestRepository).delete(any(GuestEntity.class));
         }
     }
 }
