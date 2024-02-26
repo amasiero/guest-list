@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import me.amasiero.guestlist.domain.core.exception.TableNotAvailableException;
 import me.amasiero.guestlist.domain.core.exception.TableNotFoundException;
 import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
 
@@ -50,6 +51,17 @@ public record GlobalExceptionHandler() {
         return ErrorDto.builder()
                        .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                        .message(tableOutOfCapacityException.getMessage())
+                       .build();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = { TableNotAvailableException.class })
+    public ErrorDto handleException(TableNotAvailableException tableNotAvailableException) {
+        log.error(tableNotAvailableException.getMessage(), tableNotAvailableException);
+        return ErrorDto.builder()
+                       .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                       .message(tableNotAvailableException.getMessage())
                        .build();
     }
 
