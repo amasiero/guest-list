@@ -17,6 +17,7 @@ import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateResponse
 import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestListResponse;
+import me.amasiero.guestlist.domain.service.dto.seat.EmptySeatsResponse;
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateResponse;
 import me.amasiero.guestlist.domain.service.ports.input.ReservationService;
@@ -73,5 +74,13 @@ public record ReservationController(
     public ResponseEntity<Void> guestLeave(@PathVariable("name") String name) {
         reservationService.guestLeave(name);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/seats_empty")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmptySeatsResponse> retrieveEmptySeats() {
+        var seatsEmpty = reservationService.retrieveEmptySeats();
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(seatsEmpty);
     }
 }

@@ -7,6 +7,7 @@ import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateResponse
 import me.amasiero.guestlist.domain.service.dto.list.GuestArrivedDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
 import me.amasiero.guestlist.domain.service.dto.list.GuestListResponse;
+import me.amasiero.guestlist.domain.service.dto.seat.EmptySeatsResponse;
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateResponse;
 
@@ -20,4 +21,6 @@ public interface ReservationService {
     GuestListResponse<GuestArrivedDto> listOfArrivals();
 
     void guestLeave(String name);
+
+    EmptySeatsResponse retrieveEmptySeats();
 }

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
+import me.amasiero.guestlist.domain.service.handler.EmptySeatsHandler;
 import me.amasiero.guestlist.domain.service.handler.ReservationHandler;
 import me.amasiero.guestlist.domain.service.mock.GuestArrivedDtoDataMock;
 import me.amasiero.guestlist.domain.service.mock.GuestDtoDataMock;
@@ -37,6 +38,8 @@ class ReservationServiceTest {
     @Mock
     ReservationHandler handler;
     @Mock
+    EmptySeatsHandler emptySeatsHandler;
+    @Mock
     ValidatorHelper helper;
     ReservationService service;
 
@@ -45,7 +48,7 @@ class ReservationServiceTest {
         try (var factory = Validation.buildDefaultValidatorFactory()) {
             var validator = factory.getValidator();
             helper = new ValidatorHelper(validator);
-            service = new ReservationServiceImpl(handler, helper);
+            service = new ReservationServiceImpl(handler, emptySeatsHandler, helper);
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.transaction.Transactional;
 
 import me.amasiero.guestlist.data.entity.GuestEntity;
+import me.amasiero.guestlist.data.entity.TableEntity;
 import me.amasiero.guestlist.domain.core.entity.Reservation;
 
 public interface GuestRepository {
@@ -19,4 +20,6 @@ public interface GuestRepository {
 
     @Transactional
     void delete(GuestEntity guest);
+
+    List<TableEntity> findAllTables();
 }

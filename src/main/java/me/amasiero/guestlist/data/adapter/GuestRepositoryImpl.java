@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import me.amasiero.guestlist.data.entity.GuestEntity;
+import me.amasiero.guestlist.data.entity.TableEntity;
 import me.amasiero.guestlist.data.mapper.GuestDataAccessMapper;
 import me.amasiero.guestlist.data.repository.GuestJpaRepository;
 import me.amasiero.guestlist.data.repository.TableJpaRepository;
@@ -70,5 +71,10 @@ public record GuestRepositoryImpl(
         var table = guest.getTable();
         tableRepository.save(table);
         repository.delete(guest);
+    }
+
+    @Override
+    public List<TableEntity> findAllTables() {
+        return tableRepository.findAll();
     }
 }
