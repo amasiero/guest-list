@@ -9,6 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateRequest;
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateResponse;
 import me.amasiero.guestlist.domain.service.dto.list.GuestListResponse;
+import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
+import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateResponse;
 import me.amasiero.guestlist.domain.service.handler.ReservationHandler;
 import me.amasiero.guestlist.domain.service.mapper.ReservationDataMapper;
 import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
@@ -26,7 +28,7 @@ public record ReservationServiceImpl(
         validatorHelper.validate(() -> guest);
         var reservationCreated = reservationHandler.createReservation(
             guest,
-            ReservationDataMapper::fromGuestCreateRequest
+            ReservationDataMapper::fromRequest
         );
         return new ReservationCreateResponse(reservationCreated.guest().name());
     }
@@ -35,6 +37,16 @@ public record ReservationServiceImpl(
     public GuestListResponse listGuests() {
         var list = reservationHandler.listGuests();
         return new GuestListResponse(list);
+    }
+
+    @Override
+    public ReservationUpdateResponse updateReservation(ReservationUpdateRequest guest) {
+        validatorHelper.validate(() -> guest);
+        reservationHandler.updateReservation(
+            guest,
+            ReservationDataMapper::fromRequest
+        );
+        return new ReservationUpdateResponse(guest.name());
     }
 }
 

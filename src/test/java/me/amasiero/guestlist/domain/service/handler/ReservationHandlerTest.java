@@ -19,7 +19,6 @@ import me.amasiero.guestlist.domain.service.mock.GuestEntityDataMock;
 import me.amasiero.guestlist.domain.service.mock.ReservationDataMock;
 import me.amasiero.guestlist.domain.service.mock.TableEntityDataMock;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
-import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
@@ -31,9 +30,6 @@ class ReservationHandlerTest {
 
     @Mock
     GuestRepository guestRepository;
-
-    @Mock
-    ValidatorHelper validatorHelper;
 
     @InjectMocks
     ReservationHandler reservationHandler;
@@ -53,7 +49,6 @@ class ReservationHandlerTest {
 
             reservationHandler.createReservation(reservation, Function.identity());
 
-            verify(validatorHelper).validate(any());
             verify(guestRepository).getGuestEntity(any(Reservation.class));
             verify(guestRepository).save(any(GuestEntity.class));
             verify(guestRepository).hasTableAvailable();

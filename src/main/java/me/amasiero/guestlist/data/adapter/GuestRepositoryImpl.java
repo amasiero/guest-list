@@ -26,12 +26,33 @@ public record GuestRepositoryImpl(
 
     @Override
     public GuestEntity getGuestEntity(Reservation reservation) {
-        return mapper.toEntity(reservation, () -> tableRepository
-            .findById(reservation.table().id())
-            .orElseThrow(() -> new TableNotFoundException(
-                "Table with number %s not found."
-                    .formatted(reservation.table().id())
-            )));
+        var currentEntity = getEntity(reservation);
+        var guestEntity = repository.findByName(reservation.guest().name());
+
+        if (guestEntity.isEmpty()) {
+            return currentEntity;
+        }
+
+        guestEntity.ifPresent(entity -> {
+            entity.setAccompanyingGuests(currentEntity.getAccompanyingGuests());
+            entity.setTimeArrived(currentEntity.getTimeArrived());
+            entity.setTable(currentEntity.getTable());
+        });
+        return guestEntity.get();
+    }
+
+    private GuestEntity getEntity(Reservation reservation) {
+        return mapper.toEntity(reservation, () -> reservation.table() != null ?
+            tableRepository.findById(reservation.table().id())
+                           .orElseThrow(() -> new TableNotFoundException(
+                               "Table with number %s not found."
+                                   .formatted(reservation.table().id())
+                           )) :
+            tableRepository.findByGuestName(reservation.guest().name())
+                           .orElseThrow(() -> new TableNotFoundException(
+                               "Table with guest name %s not found."
+                                   .formatted(reservation.guest().name())
+                           )));
     }
 
     @Override
