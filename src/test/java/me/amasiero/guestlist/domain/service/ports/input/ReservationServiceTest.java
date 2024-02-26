@@ -1,5 +1,6 @@
 package me.amasiero.guestlist.domain.service.ports.input;
 
+import java.util.List;
 import java.util.function.Function;
 
 import jakarta.validation.ConstraintViolationException;
@@ -13,9 +14,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import me.amasiero.guestlist.domain.service.dto.update.ReservationUpdateRequest;
 import me.amasiero.guestlist.domain.service.handler.ReservationHandler;
+import me.amasiero.guestlist.domain.service.mock.GuestArrivedDtoDataMock;
+import me.amasiero.guestlist.domain.service.mock.GuestDtoDataMock;
 import me.amasiero.guestlist.domain.service.mock.ReservationCreateRequestDataMock;
 import me.amasiero.guestlist.domain.service.mock.ReservationDataMock;
+import me.amasiero.guestlist.domain.service.mock.ReservationUpdateRequestDataMock;
 import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -105,6 +112,73 @@ class ReservationServiceTest {
         void shouldNotCreateReservationWithInvalidAccompanyingGuests() {
             var guestRequestWithInvalidAccompanyingGuests = ReservationCreateRequestDataMock.buildWithAccompanyingGuests(-1);
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithInvalidAccompanyingGuests));
+        }
+    }
+
+    @Nested
+    @DisplayName("when listing guests")
+    class ListGuests {
+
+        @Test
+        @DisplayName("returns all guests")
+        void returnsAllGuests() {
+            var guests = List.of(GuestDtoDataMock.build(), GuestDtoDataMock.build());
+            when(handler.listGuests()).thenReturn(guests);
+
+            var result = service.listGuests();
+
+            assertEquals(guests.size(), result.guests().size());
+            verify(handler).listGuests();
+        }
+    }
+
+    @Nested
+    @DisplayName("when updating a reservation")
+    class UpdateReservation {
+
+        @Test
+        @DisplayName("updates the reservation successfully")
+        void updatesReservationSuccessfully() {
+            var reservationUpdateRequest = ReservationUpdateRequestDataMock.build();
+            doNothing().when(handler).updateReservation(any(ReservationUpdateRequest.class), any(Function.class));
+
+            var result = service.updateReservation(reservationUpdateRequest);
+
+            assertEquals(reservationUpdateRequest.name(), result.name());
+            verify(handler).updateReservation(any(ReservationUpdateRequest.class), any(Function.class));
+        }
+    }
+
+    @Nested
+    @DisplayName("when listing arrivals")
+    class ListOfArrivals {
+
+        @Test
+        @DisplayName("returns all arrived guests")
+        void returnsAllArrivedGuests() {
+            var guests = List.of(GuestArrivedDtoDataMock.build(), GuestArrivedDtoDataMock.build());
+            when(handler.listOfArrivals()).thenReturn(guests);
+
+            var result = service.listOfArrivals();
+
+            assertEquals(guests.size(), result.guests().size());
+            verify(handler).listOfArrivals();
+        }
+    }
+
+    @Nested
+    @DisplayName("when a guest leaves")
+    class GuestLeave {
+
+        @Test
+        @DisplayName("removes the guest successfully")
+        void removesGuestSuccessfully() {
+            var guestName = "John Doe";
+            doNothing().when(handler).guestLeave(any(String.class));
+
+            service.guestLeave(guestName);
+
+            verify(handler).guestLeave(any(String.class));
         }
     }
 
