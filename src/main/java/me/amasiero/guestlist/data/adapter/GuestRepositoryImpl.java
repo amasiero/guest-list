@@ -1,5 +1,7 @@
 package me.amasiero.guestlist.data.adapter;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import me.amasiero.guestlist.data.entity.GuestEntity;
@@ -35,5 +37,10 @@ public record GuestRepositoryImpl(
     @Override
     public Boolean hasTableAvailable() {
         return null;
+    }
+
+    @Override
+    public List<GuestEntity> findAll() {
+        return repository.findAll();
     }
 }

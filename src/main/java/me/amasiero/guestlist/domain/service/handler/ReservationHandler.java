@@ -1,5 +1,6 @@
 package me.amasiero.guestlist.domain.service.handler;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
@@ -9,6 +10,8 @@ import me.amasiero.guestlist.domain.core.entity.Reservation;
 import me.amasiero.guestlist.domain.core.exception.TableNotAvailableException;
 import me.amasiero.guestlist.domain.core.exception.TableOutOfCapacityException;
 import me.amasiero.guestlist.domain.core.valueobject.TableStatus;
+import me.amasiero.guestlist.domain.service.dto.list.GuestDto;
+import me.amasiero.guestlist.domain.service.mapper.GuestDataMapper;
 import me.amasiero.guestlist.domain.service.ports.output.GuestRepository;
 import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
@@ -38,5 +41,12 @@ public record ReservationHandler(
         if (!guestRepository.hasTableAvailable()) {
             throw new TableOutOfCapacityException("There are no tables available");
         }
+    }
+
+    public List<GuestDto> listGuests() {
+        var guests = guestRepository.findAll();
+        return guests.stream()
+                     .map(GuestDataMapper::fromEntity)
+                     .toList();
     }
 }
