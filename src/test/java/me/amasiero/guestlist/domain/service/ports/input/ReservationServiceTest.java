@@ -13,9 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import me.amasiero.guestlist.domain.service.dto.mock.ReservationCreateRequestDataMock;
-import me.amasiero.guestlist.domain.service.dto.mock.ReservationDataMock;
 import me.amasiero.guestlist.domain.service.handler.ReservationHandler;
+import me.amasiero.guestlist.domain.service.mock.ReservationCreateRequestDataMock;
+import me.amasiero.guestlist.domain.service.mock.ReservationDataMock;
 import me.amasiero.guestlist.domain.service.util.ValidatorHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,13 +28,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
     @Mock
-    protected ReservationHandler handler;
+    ReservationHandler handler;
     @Mock
-    protected ValidatorHelper helper;
-    protected ReservationService service;
+    ValidatorHelper helper;
+    ReservationService service;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         try (var factory = Validation.buildDefaultValidatorFactory()) {
             var validator = factory.getValidator();
             helper = new ValidatorHelper(validator);
@@ -48,7 +48,7 @@ class ReservationServiceTest {
 
         @Test
         @DisplayName("should successfully create a reservation")
-        public void shouldCreateAReservation() {
+        void shouldCreateAReservation() {
             var guestRequest = ReservationCreateRequestDataMock.build();
             var reservation = ReservationDataMock.build();
             when(handler.createReservation(eq(guestRequest), any(Function.class))).thenReturn(reservation);
@@ -61,48 +61,48 @@ class ReservationServiceTest {
 
         @Test
         @DisplayName("should not create a reservation with null data")
-        public void shouldNotCreateReservationWithNullData() {
+        void shouldNotCreateReservationWithNullData() {
             assertThrows(IllegalArgumentException.class, () -> service.createReservation(null));
         }
 
         @Test
         @DisplayName("should not create a reservation without name")
-        public void shouldNotCreateReservationWithoutName() {
+        void shouldNotCreateReservationWithoutName() {
             var guestRequestWithoutName = ReservationCreateRequestDataMock.buildWithName(null);
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithoutName));
         }
 
         @Test
         @DisplayName("should not create a reservation with invalid name")
-        public void shouldNotCreateReservationWithInvalidName() {
+        void shouldNotCreateReservationWithInvalidName() {
             var guestRequestWithInvalidName = ReservationCreateRequestDataMock.buildWithName("");
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithInvalidName));
         }
 
         @Test
         @DisplayName("should not create a reservation without table")
-        public void shouldNotCreateReservationWithoutTable() {
+        void shouldNotCreateReservationWithoutTable() {
             var guestRequestWithoutTable = ReservationCreateRequestDataMock.buildWithTable(null);
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithoutTable));
         }
 
         @Test
         @DisplayName("should not create a reservation with invalid table")
-        public void shouldNotCreateReservationWithInvalidTable() {
+        void shouldNotCreateReservationWithInvalidTable() {
             var guestRequestWithInvalidTable = ReservationCreateRequestDataMock.buildWithTable(0);
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithInvalidTable));
         }
 
         @Test
         @DisplayName("should not create a reservation without accompanying guests")
-        public void shouldNotCreateReservationWithoutAccompanyingGuests() {
+        void shouldNotCreateReservationWithoutAccompanyingGuests() {
             var guestRequestWithoutAccompanyingGuests = ReservationCreateRequestDataMock.buildWithAccompanyingGuests(null);
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithoutAccompanyingGuests));
         }
 
         @Test
         @DisplayName("should not create a reservation with invalid accompanying guests")
-        public void shouldNotCreateReservationWithInvalidAccompanyingGuests() {
+        void shouldNotCreateReservationWithInvalidAccompanyingGuests() {
             var guestRequestWithInvalidAccompanyingGuests = ReservationCreateRequestDataMock.buildWithAccompanyingGuests(-1);
             assertThrows(ConstraintViolationException.class, () -> service.createReservation(guestRequestWithInvalidAccompanyingGuests));
         }

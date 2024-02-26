@@ -1,4 +1,4 @@
-package me.amasiero.guestlist.domain.service.dto.mock;
+package me.amasiero.guestlist.domain.service.mock;
 
 import me.amasiero.guestlist.domain.service.dto.create.ReservationCreateRequest;
 
